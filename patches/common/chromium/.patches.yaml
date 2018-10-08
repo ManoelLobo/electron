@@ -483,3 +483,8 @@ patches:
   file: printing.patch
   description:  |
     Add changeset that was previously applied to sources in chromium_src
+-
+  author: Heilig Benedek <benecene@gmail.com>
+  file: tts.patch
+  description:  |
+    Add changeset that was previously applied to sources in chromium_src

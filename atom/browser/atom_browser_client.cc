@@ -40,7 +40,6 @@
 #include "base/strings/string_util.h"
 #include "base/strings/utf_string_conversions.h"
 #include "chrome/browser/printing/printing_message_filter.h"
-#include "chrome/browser/speech/tts_message_filter.h"
 #include "components/net_log/chrome_net_log.h"
 #include "content/public/browser/browser_ppapi_host.h"
 #include "content/public/browser/client_certificate_delegate.h"
@@ -88,6 +87,10 @@
 #if BUILDFLAG(ENABLE_PRINTING_ELECTRON)
 #include "chrome/services/printing/public/mojom/constants.mojom.h"
 #endif  // BUILDFLAG(ENABLE_PRINTING_ELECTRON)
+
+#if BUILDFLAG(ENABLE_TTS)
+#include "chrome/browser/speech/tts_message_filter.h"
+#endif  // BUILDFLAG(ENABLE_TTS)
 
 using content::BrowserThread;
 
@@ -213,7 +216,10 @@ void AtomBrowserClient::RenderProcessWillLaunch(
 #if BUILDFLAG(ENABLE_PRINTING_ELECTRON)
   host->AddFilter(new printing::PrintingMessageFilter(process_id));
 #endif
-  host->AddFilter(new TtsMessageFilter(process_id, host->GetBrowserContext()));
+
+#if BUILDFLAG(ENABLE_TTS)
+  host->AddFilter(new TtsMessageFilter(host->GetBrowserContext()));
+#endif
 
   ProcessPreferences prefs;
   auto* web_preferences =
